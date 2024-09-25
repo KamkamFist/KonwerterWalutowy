@@ -77,10 +77,10 @@
             RUB.AutoSize = true;
             RUB.Location = new Point(17, 108);
             RUB.Name = "RUB";
-            RUB.Size = new Size(47, 19);
+            RUB.Size = new Size(43, 19);
             RUB.TabIndex = 2;
             RUB.TabStop = true;
-            RUB.Text = "RUB";
+            RUB.Text = "JPY";
             RUB.UseVisualStyleBackColor = true;
             // 
             // TRY
@@ -155,10 +155,10 @@
             RUB1.AutoSize = true;
             RUB1.Location = new Point(9, 113);
             RUB1.Name = "RUB1";
-            RUB1.Size = new Size(47, 19);
+            RUB1.Size = new Size(43, 19);
             RUB1.TabIndex = 12;
             RUB1.TabStop = true;
-            RUB1.Text = "RUB";
+            RUB1.Text = "JPY";
             RUB1.UseVisualStyleBackColor = true;
             // 
             // EUR1

@@ -1,54 +1,68 @@
+using System.Net.Http;
+using System.Net.Http.Json;
+
 namespace WinFormsApp3
 {
     public partial class Form1 : Form
-    {
+    {    
+        
+        private HttpClient sharedClient = new()
+        {
+            BaseAddress = new Uri("https://api.nbp.pl/"),
+        };
+
+        List<Rate> xd = new();    
+
         public Form1()
         {
             InitializeComponent();
+
+            xd.Add(new Rate { currency = "Z³oty", code = "PLN", mid = 1 });
+            var waluty = sharedClient.GetFromJsonAsync<List<RatesTable>>("/api/exchangerates/tables/A?format=json").Result[0];
+
+            for (int i = 0; i < waluty.rates.Count; i++)
+            {
+               xd.Add(waluty.rates[i]);
+            }
         }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
 
         }
-        float liczba = 0;
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            if (int.TryParse(textBox1.Text, out int result))
-            {
-                liczba = result;
-            }
+          
         }
 
-        void funkcja()
+      
+
+        void funkcja(double stara)
         {
             if (PLN.Checked)
             {
-                label1.Text = liczba.ToString("0.00") + "PLN";
+                var waluta = xd.Find(x => x.code == "PLN");
+                label1.Text = (stara / waluta.mid).ToString("0.00") + waluta.code;
             }
             else if (USD.Checked)
             {
-                liczba *= 0.26f;
-                label1.Text = liczba.ToString("0.00") + "USD";
-                liczba /= 0.26f;
+                var waluta = xd.Find(x => x.code == "USD");
+                label1.Text = (stara / waluta.mid).ToString("0.00") + waluta.code;
             }
             else if (EUR.Checked)
             {
-                liczba *= 0.23f;
-                label1.Text = liczba.ToString("0.00") + "EUR";
-                liczba /= 0.23f;
+                var waluta = xd.Find(x => x.code == "EUR");
+                label1.Text = (stara / waluta.mid).ToString("0.00") + waluta.code;
             }
             else if (RUB.Checked)
             {
-                liczba *= 24.38f;
-                label1.Text = liczba.ToString("0.00") + "RUB";
-                liczba /= 24.38f;
+                var waluta = xd.Find(x => x.code == "JPY");
+                label1.Text = (stara / waluta.mid).ToString("0.00") + waluta.code;
             }
             else if (TRY.Checked)
             {
-                liczba *= 8.97f;
-                label1.Text = liczba.ToString("0.00") + "TRY";
-                liczba /= 8.97f;
+                var waluta = xd.Find(x => x.code == "TRY");
+                label1.Text = (stara / waluta.mid).ToString("0.00") + waluta.code;
             }
         }
 
@@ -56,41 +70,30 @@ namespace WinFormsApp3
 
         private void button1_Click(object sender, EventArgs e)
         {
+            double.TryParse(textBox1.Text, out double liczba);
             if (PLN1.Checked)
             {
-                funkcja();
+                funkcja(liczba);
             }
             if (USD1.Checked)
             {
-                liczba *= 3.81f;
-
-                funkcja();
-
-                liczba /= 3.81f;
+                var waluta = xd.Find(x => x.code == "USD");
+                funkcja(liczba * waluta.mid);
             }
             if (EUR1.Checked)
             {
-                liczba *= 4.26f;
-
-                funkcja();
-
-                liczba /= 4.26f;
+                var waluta = xd.Find(x => x.code == "EUR");
+                funkcja(liczba * waluta.mid);
             }
             if (RUB1.Checked)
             {
-                liczba /= 24.38f;
-
-                funkcja();
-
-                liczba *= 24.38f;
+                var waluta = xd.Find(x => x.code == "JPY");
+                funkcja(liczba * waluta.mid);
             }
             if (TRY1.Checked)
             {
-                liczba /= 8.97f;
-
-                funkcja();
-
-                liczba *= 8.97f;
+                var waluta = xd.Find(x => x.code == "TRY");
+                funkcja(liczba * waluta.mid);
             }
 
 
@@ -109,3 +112,4 @@ namespace WinFormsApp3
         }
     }
 }
+
